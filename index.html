@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#1e40af">
+    <title>Airline Reserve Shift Navigator</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .menu-step {
+            background: #f9fafb;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .menu-step-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .menu-step-label {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .remove-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .menu-step input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            margin-bottom: 12px;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+            margin-bottom: 12px;
+        }
+
+        .btn-call {
+            background: #059669;
+            color: white;
+            font-size: 18px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .result {
+            background: #f0fdf4;
+            border: 2px solid #10b981;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .result-label {
+            font-size: 12px;
+            color: #059669;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .result-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #047857;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+        }
+
+        .saved-configs {
+            margin-top: 12px;
+        }
+
+        .config-item {
+            background: #f9fafb;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .config-name {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .config-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .config-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .load-btn {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+        }
+
+        .ad-container {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .ad-placeholder {
+            background: #f3f4f6;
+            padding: 40px 20px;
+            border-radius: 8px;
+            color: #6b7280;
+            font-size: 14px;
+            border: 2px dashed #d1d5db;
+        }
+
+        .install-prompt {
+            background: #1e40af;
+            color: white;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .install-prompt p {
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .install-prompt button {
+            width: 100%;
+            padding: 12px;
+            background: white;
+            color: #1e40af;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 16px;
+                padding-bottom: 70px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✈️ Reserve Shift Navigator</h1>
+            <p>Phone Menu Calculator for Airline Proffering</p>
+        </div>
+
+        <div id="installPrompt" class="install-prompt">
+            <p>📱 Install this app on your home screen for quick access!</p>
+            <button onclick="installApp()">Install App</button>
+        </div>
+
+        <!-- Ad Space -->
+        <div class="ad-container">
+            <div class="ad-placeholder">
+                <!-- Replace this with your Google AdSense code -->
+                Ad Space (320x50)
+                <br><small>Add your AdSense code here</small>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="input-group">
+                <label for="baseNumber">Base Phone Number</label>
+                <input type="tel" id="baseNumber" placeholder="1-800-555-1234" value="">
+                <div class="help-text">Enter the main number to call</div>
+            </div>
+
+            <div id="menuSteps"></div>
+
+            <button class="btn btn-primary" onclick="addMenuStep()">+ Add Menu Step</button>
+        </div>
+
+        <div id="resultCard" class="card" style="display: none;">
+            <div class="result">
+                <div class="result-label">GENERATED NUMBER (Tap to copy)</div>
+                <div class="result-number" id="resultNumber" onclick="copyNumber()"></div>
+            </div>
+
+            <button class="btn btn-call" onclick="callNumber()">📞 Call Now</button>
+
+            <div class="input-group">
+                <label for="configName">Save this configuration</label>
+                <input type="text" id="configName" placeholder="e.g., Morning Shift Proffer">
+            </div>
+            <button class="btn btn-success" onclick="saveConfig()">💾 Save Configuration</button>
+        </div>
+
+        <div class="card">
+            <h3 style="margin-bottom: 16px; color: #374151;">Saved Configurations</h3>
+            <div id="savedConfigs"></div>
+        </div>
+
+        <div class="card">
+            <h3 style="margin-bottom: 12px; color: #374151;">ℹ️ How It Works</h3>
+            <p style="color: #6b7280; font-size: 14px; line-height: 1.6;">
+                1. Enter the base phone number<br>
+                2. Add menu steps for each IVR option (e.g., "Press 1 for...", "Press 2 for...")<br>
+                3. The app generates a dialable number with commas (pauses)<br>
+                4. Tap "Call Now" to dial automatically<br>
+                5. Save frequently used configurations for quick access
+            </p>
+        </div>
+    </div>
+
+    <script>
+        let menuStepCount = 0;
+        let deferredPrompt;
+
+        // PWA Install Prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installPrompt').style.display = 'block';
+        });
+
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        document.getElementById('installPrompt').style.display = 'none';
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        }
+
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('Service Worker registered'))
+                .catch(err => console.log('Service Worker registration failed'));
+        }
+
+        function addMenuStep() {
+            menuStepCount++;
+            const stepDiv = document.createElement('div');
+            stepDiv.className = 'menu-step';
+            stepDiv.id = `step-${menuStepCount}`;
+            stepDiv.innerHTML = `
+                <div class="menu-step-header">
+                    <span class="menu-step-label">Step ${menuStepCount}</span>
+                    <button class="remove-btn" onclick="removeStep(${menuStepCount})">Remove</button>
+                </div>
+                <input type="text" 
+                       placeholder="Enter menu option (e.g., 1, 2, 3)" 
+                       onchange="generateNumber()"
+                       data-step="${menuStepCount}">
+                <div class="help-text">Press option at this menu level</div>
+            `;
+            document.getElementById('menuSteps').appendChild(stepDiv);
+        }
+
+        function removeStep(stepId) {
+            const step = document.getElementById(`step-${stepId}`);
+            if (step) {
+                step.remove();
+                generateNumber();
+            }
+        }
+
+        function generateNumber() {
+            const baseNumber = document.getElementById('baseNumber').value.replace(/\D/g, '');
+            if (!baseNumber) {
+                document.getElementById('resultCard').style.display = 'none';
+                return;
+            }
+
+            const steps = Array.from(document.querySelectorAll('#menuSteps input'))
+                .map(input => input.value.trim())
+                .filter(val => val !== '');
+
+            let finalNumber = baseNumber;
+            
+            // Add commas for pauses (each comma is about 2 second pause)
+            // Standard is 2-3 commas between menu selections
+            steps.forEach(step => {
+                finalNumber += ',,' + step;
+            });
+
+            // Format for display
+            const formatted = formatPhoneNumber(finalNumber);
+            document.getElementById('resultNumber').textContent = formatted;
+            document.getElementById('resultCard').style.display = 'block';
+        }
+
+        function formatPhoneNumber(number) {
+            // Keep commas visible in the formatted output
+            return number.replace(/(\d{1})(\d{3})(\d{3})(\d{4})/, '$1-$2-$3-$4');
+        }
+
+        function copyNumber() {
+            const number = document.getElementById('resultNumber').textContent;
+            navigator.clipboard.writeText(number).then(() => {
+                alert('Number copied to clipboard!');
+            });
+        }
+
+        function callNumber() {
+            const number = document.getElementById('resultNumber').textContent;
+            window.location.href = `tel:${number}`;
+        }
+
+        function saveConfig() {
+            const name = document.getElementById('configName').value.trim();
+            if (!name) {
+                alert('Please enter a name for this configuration');
+                return;
+            }
+
+            const baseNumber = document.getElementById('baseNumber').value;
+            const steps = Array.from(document.querySelectorAll('#menuSteps input'))
+                .map(input => input.value.trim());
+
+            const config = {
+                name: name,
+                baseNumber: baseNumber,
+                steps: steps,
+                timestamp: new Date().toISOString()
+            };
+
+            let configs = JSON.parse(localStorage.getItem('phoneConfigs') || '[]');
+            configs.push(config);
+            localStorage.setItem('phoneConfigs', JSON.stringify(configs));
+
+            document.getElementById('configName').value = '';
+            loadSavedConfigs();
+            alert('Configuration saved!');
+        }
+
+        function loadSavedConfigs() {
+            const configs = JSON.parse(localStorage.getItem('phoneConfigs') || '[]');
+            const container = document.getElementById('savedConfigs');
+
+            if (configs.length === 0) {
+                container.innerHTML = '<p style="color: #6b7280; font-size: 14px;">No saved configurations yet</p>';
+                return;
+            }
+
+            container.innerHTML = configs.map((config, index) => `
+                <div class="config-item">
+                    <div class="config-name">${config.name}</div>
+                    <div class="config-actions">
+                        <button class="config-btn load-btn" onclick="loadConfig(${index})">Load</button>
+                        <button class="config-btn delete-btn" onclick="deleteConfig(${index})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadConfig(index) {
+            const configs = JSON.parse(localStorage.getItem('phoneConfigs') || '[]');
+            const config = configs[index];
+
+            document.getElementById('baseNumber').value = config.baseNumber;
+            
+            // Clear existing steps
+            document.getElementById('menuSteps').innerHTML = '';
+            menuStepCount = 0;
+
+            // Add saved steps
+            config.steps.forEach(stepValue => {
+                addMenuStep();
+                const inputs = document.querySelectorAll('#menuSteps input');
+                inputs[inputs.length - 1].value = stepValue;
+            });
+
+            generateNumber();
+            window.scrollTo(0, 0);
+        }
+
+        function deleteConfig(index) {
+            if (!confirm('Delete this configuration?')) return;
+
+            let configs = JSON.parse(localStorage.getItem('phoneConfigs') || '[]');
+            configs.splice(index, 1);
+            localStorage.setItem('phoneConfigs', JSON.stringify(configs));
+            loadSavedConfigs();
+        }
+
+        // Monitor base number changes
+        document.getElementById('baseNumber').addEventListener('input', generateNumber);
+
+        // Load saved configs on startup
+        loadSavedConfigs();
+
+        // Add initial menu step
+        addMenuStep();
+    </script>
+</body>
+</html>

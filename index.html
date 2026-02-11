@@ -1180,8 +1180,10 @@
             // Add pause after phone number
             finalNumber += ','.repeat(timings.afterPhone);
             
-            // Add password
-            finalNumber += password;
+            // Add password (if provided)
+            if (password) {
+                finalNumber += password;
+            }
             
             // Add pause after password
             finalNumber += ','.repeat(timings.afterPassword);

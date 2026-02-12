@@ -2,7 +2,7 @@
   "name": "Airline Reserve Shift Navigator",
   "short_name": "Shift Nav",
   "description": "Phone menu calculator for airline reserve shift proffering",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#667eea",
   "theme_color": "#1e40af",

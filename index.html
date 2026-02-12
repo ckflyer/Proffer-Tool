@@ -1209,19 +1209,20 @@
             // Add comma before first shift
             finalNumber += ','.repeat(timings.betweenShifts);
             
-            // Now add each shift/sequence: shift_code + afterShift + 1 + betweenShifts (except last)
+            // Add each shift/sequence
             selectedShifts.forEach((shift, index) => {
                 finalNumber += shift.code;
                 finalNumber += ','.repeat(timings.afterShift);
-                finalNumber += '1';
                 
-                // Add betweenShifts pause if not the last shift
+                // If NOT the last shift, add "1" (meaning "add another")
+                // If IS the last shift, skip the "1" and go to "8" instead
                 if (index < selectedShifts.length - 1) {
+                    finalNumber += '1';
                     finalNumber += ','.repeat(timings.betweenShifts);
                 }
             });
             
-            // Final completion: 8, 1
+            // Final completion: 8 (done adding), then pause, then 1 (post proffer)
             finalNumber += ','.repeat(timings.final);
             finalNumber += '8';
             finalNumber += ','.repeat(timings.final);

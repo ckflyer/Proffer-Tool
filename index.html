@@ -844,19 +844,21 @@
         </div>
 
         <!-- Result -->
-        <div id="resultCard" class="card" style="display: none;">
+        <div id="resultCard" class="card">
             <div class="result">
                 <div class="result-label">GENERATED NUMBER (Tap to copy)</div>
-                <div class="result-number" id="resultNumber" onclick="copyNumber()"></div>
+                <div class="result-number" id="resultNumber" onclick="copyNumber()">Select shifts to generate number</div>
             </div>
 
-            <button class="btn btn-call" onclick="callNumber()">📞 Call Now</button>
+            <div id="callSection" style="display: none;">
+                <button class="btn btn-call" onclick="callNumber()">📞 Call Now</button>
 
-            <div class="input-group">
-                <label for="configName">Save this configuration</label>
-                <input type="text" id="configName" placeholder="e.g., Morning RAP Proffer">
+                <div class="input-group">
+                    <label for="configName">Save this configuration</label>
+                    <input type="text" id="configName" placeholder="e.g., Morning RAP Proffer">
+                </div>
+                <button class="btn btn-success" onclick="saveConfig()">💾 Save Configuration</button>
             </div>
-            <button class="btn btn-success" onclick="saveConfig()">💾 Save Configuration</button>
         </div>
 
         <!-- Saved Configs -->
@@ -1178,7 +1180,8 @@
             const baseNumber = crewPhone.replace(/\D/g, '');
             
             if (!baseNumber || selectedShifts.length === 0) {
-                document.getElementById('resultCard').style.display = 'none';
+                document.getElementById('resultNumber').textContent = 'Select shifts to generate number';
+                document.getElementById('callSection').style.display = 'none';
                 return;
             }
 
@@ -1191,16 +1194,20 @@
             // Add initial pause (after phone number)
             finalNumber += ','.repeat(timings.initial);
             
-            // Add password (if provided)
+            // Add password (if provided) with comma before it
             if (password) {
                 finalNumber += password;
+                finalNumber += ','.repeat(timings.menuNav);
             }
             
             // Menu navigation: 1, 1, 2, 2
-            finalNumber += ','.repeat(timings.menuNav) + '1';
+            finalNumber += '1';
             finalNumber += ','.repeat(timings.menuNav) + '1';
             finalNumber += ','.repeat(timings.menuNav) + '2';
             finalNumber += ','.repeat(timings.menuNav) + '2';
+            
+            // Add comma before first shift
+            finalNumber += ','.repeat(timings.betweenShifts);
             
             // Now add each shift/sequence: shift_code + afterShift + 1 + betweenShifts (except last)
             selectedShifts.forEach((shift, index) => {
@@ -1223,7 +1230,7 @@
             // Format for display
             const formatted = formatPhoneNumber(finalNumber);
             document.getElementById('resultNumber').textContent = formatted;
-            document.getElementById('resultCard').style.display = 'block';
+            document.getElementById('callSection').style.display = 'block';
         }
 
         function formatPhoneNumber(number) {

@@ -6,8 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#1e40af">
-    <meta name="google-adsense-account" content="ca-pub-4712560769123681">
-    <title>Proffer Calc</title>
+    <title>ProfferCalc</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
     <style>
@@ -711,6 +710,26 @@
             font-size: 14px;
         }
 
+        .coffee-btn {
+            width: 100%;
+            padding: 12px;
+            background: #FFDD00;
+            color: #000000;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin-top: 12px;
+        }
+
+        .coffee-btn:hover {
+            background: #FFED4E;
+        }
+
         @media (max-width: 480px) {
             body {
                 padding: 16px;
@@ -734,7 +753,7 @@
     <!-- Install Banner -->
     <div class="install-banner" id="installBanner">
         <div class="install-banner-content">
-            <strong>📱 Install Proffer Calc</strong><br>
+            <strong>📱 Install ProfferCalc</strong><br>
             <small>Add to home screen for quick access</small>
         </div>
         <button onclick="installApp()">Install</button>
@@ -823,11 +842,19 @@
         </div>
 
         <div class="menu-section">
+            <div class="menu-section-title">Support</div>
+            <a href="https://buymeacoffee.com/proffercalc" target="_blank" class="coffee-btn">
+                ☕ Buy Me a Coffee
+            </a>
+        </div>
+
+        <div class="menu-section">
             <div class="menu-section-title">About</div>
             <p style="font-size: 13px; color: #6b7280; line-height: 1.6;">
-                Proffer Calc v2.0<br>
+                ProfferCalc v2.0<br>
                 Unofficial tool for airline crew members<br><br>
-                All data stored locally on your device.
+                All data stored locally on your device.<br><br>
+                Support: <a href="mailto:proffercalc@gmail.com" style="color: #3b82f6; text-decoration: none;">proffercalc@gmail.com</a>
             </p>
         </div>
     </div>
@@ -840,35 +867,13 @@
                 <span></span>
             </button>
             <div class="header">
-                <h1>✈️ Proffer Calc</h1>
+                <h1>ProfferCalc</h1>
                 <p>Reserve Shift Selection</p>
             </div>
             <div style="width: 44px;"></div> <!-- Spacer for centering -->
         </div>
 
         <div id="installPrompt" class="install-prompt">
-            <p>📱 Install this app on your home screen for quick access!</p>
-            <button onclick="installApp()">Install App</button>
-        </div>
-
-        <!-- Ad Space -->
-        <div class="ad-container">
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4712560769123681"
-                 crossorigin="anonymous"></script>
-            <!-- Proffer Tool Ad -->
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-4712560769123681"
-                 data-ad-slot="auto"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
-
-        <!-- Quick Info Card -->
-        <div class="card">
             <div class="section-title">Your Info</div>
             <div class="quick-info">
                 <div class="quick-info-label">Crew Scheduling</div>
@@ -1025,8 +1030,8 @@
             
             if (navigator.share) {
                 navigator.share({
-                    title: 'Proffer Calc',
-                    text: 'Check out Proffer Calc for airline crew scheduling',
+                    title: 'ProfferCalc',
+                    text: 'Check out ProfferCalc for airline crew scheduling',
                     url: shareUrl
                 }).catch(() => {
                     copyToClipboard(shareUrl);

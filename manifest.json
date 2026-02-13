@@ -1,6 +1,6 @@
 {
-  "name": "Proffer Calc",
-  "short_name": "Proffer Calc",
+  "name": "ProfferCalc",
+  "short_name": "ProfferCalc",
   "description": "Phone menu calculator for airline reserve shift proffering",
   "start_url": "./",
   "display": "standalone",

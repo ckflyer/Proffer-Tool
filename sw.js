@@ -1,4 +1,4 @@
-const CACHE_NAME = 'shift-navigator-v1';
+const CACHE_NAME = 'proffercalc-v1';
 const urlsToCache = [
   '/',
   '/index.html',

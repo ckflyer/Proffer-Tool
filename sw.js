@@ -1,42 +1,64 @@
-const CACHE_NAME = 'proffercalc-v1';
+const CACHE_NAME = "proffercalc-v2"; // <-- bump this whenever you deploy changes
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json'
+  "/",
+  "/index.html",
+  "/manifest.json",
+  "/icon-192.png",
+  "/icon-512.png",
 ];
 
-// Install service worker and cache files
-self.addEventListener('install', event => {
+// Install: cache the core app shell
+self.addEventListener("install", (event) => {
+  self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache))
   );
 });
 
-// Fetch from cache first, then network
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        if (response) {
-          return response;
-        }
-        return fetch(event.request);
-      })
-  );
-});
-
-// Clean up old caches
-self.addEventListener('activate', event => {
+// Activate: delete old caches + take control immediately
+self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
+    caches.keys().then((cacheNames) =>
+      Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) return caches.delete(cacheName);
         })
-      );
+      )
+    )
+  );
+  self.clients.claim();
+});
+
+// Fetch:
+// - For page navigations (index.html / "/"): NETWORK FIRST so you get the latest version
+// - For everything else: CACHE FIRST for speed/offline
+self.addEventListener("fetch", (event) => {
+  const req = event.request;
+
+  // Any navigation request (loading the app shell)
+  if (req.mode === "navigate") {
+    event.respondWith(
+      fetch(req)
+        .then((res) => {
+          const copy = res.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
+          return res;
+        })
+        .catch(() => caches.match(req).then((r) => r || caches.match("/index.html")))
+    );
+    return;
+  }
+
+  // Other requests (icons, css, js, etc.)
+  event.respondWith(
+    caches.match(req).then((cached) => {
+      if (cached) return cached;
+
+      return fetch(req).then((res) => {
+        const copy = res.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
+        return res;
+      });
     })
   );
 });

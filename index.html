@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#1e40af">
     <meta name="google-adsense-account" content="ca-pub-4712560769123681">
-    <title>Proffer Tool</title>
+    <title>Proffer Calc</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
     <style>
@@ -516,6 +516,12 @@
             border-radius: 12px;
             margin-bottom: 16px;
             display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .install-prompt p {
@@ -532,6 +538,66 @@
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
+        }
+
+        .install-banner {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            color: white;
+            padding: 12px 16px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .install-banner-content {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .install-banner button {
+            background: white;
+            color: #1e40af;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .close-banner {
+            background: transparent !important;
+            color: white !important;
+            font-size: 20px;
+            padding: 4px 8px !important;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 12px 0;
+            padding: 12px;
+            background: var(--input-bg);
+            border-radius: 8px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            flex: 1;
+            margin: 0;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-color);
         }
 
         .help-text {
@@ -664,6 +730,17 @@
 <body>
     <!-- Side Menu -->
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+    
+    <!-- Install Banner -->
+    <div class="install-banner" id="installBanner">
+        <div class="install-banner-content">
+            <strong>📱 Install Proffer Calc</strong><br>
+            <small>Add to home screen for quick access</small>
+        </div>
+        <button onclick="installApp()">Install</button>
+        <button class="close-banner" onclick="dismissInstallBanner()">×</button>
+    </div>
+    
     <div class="side-menu" id="sideMenu">
         <div class="menu-header">
             <div class="menu-title">⚙️ Settings</div>
@@ -680,60 +757,6 @@
                 <label>Employee Password</label>
                 <input type="text" id="crewLoginNumber" placeholder="e.g., 12345">
             </div>
-        </div>
-
-        <div class="menu-section">
-            <div class="menu-section-title">Advanced Timing</div>
-            <details style="cursor: pointer;">
-                <summary style="font-size: 14px; color: var(--text-color); font-weight: 600; padding: 12px 0;">
-                    ⚙️ Adjust Call Timing (Click to expand)
-                </summary>
-                <p style="font-size: 12px; color: #6b7280; margin: 12px 0;">
-                    Fine-tune pause durations between menu steps. Each comma = ~2 seconds.
-                </p>
-                
-                <div class="timing-control">
-                    <div class="timing-label">
-                        <span class="timing-name">Initial Setup (After phone + password)</span>
-                        <span class="timing-value" id="timing1Display">3 commas</span>
-                    </div>
-                    <input type="range" min="1" max="10" value="3" class="timing-slider" id="timing1" oninput="updateTimingDisplay()">
-                </div>
-
-                <div class="timing-control">
-                    <div class="timing-label">
-                        <span class="timing-name">Menu Navigation (1, 1, 2, 2)</span>
-                        <span class="timing-value" id="timing2Display">1 comma</span>
-                    </div>
-                    <input type="range" min="1" max="10" value="1" class="timing-slider" id="timing2" oninput="updateTimingDisplay()">
-                </div>
-
-                <div class="timing-control">
-                    <div class="timing-label">
-                        <span class="timing-name">Between Shift Entries</span>
-                        <span class="timing-value" id="timing3Display">1 comma</span>
-                    </div>
-                    <input type="range" min="1" max="10" value="1" class="timing-slider" id="timing3" oninput="updateTimingDisplay()">
-                </div>
-
-                <div class="timing-control">
-                    <div class="timing-label">
-                        <span class="timing-name">After Each Shift Code</span>
-                        <span class="timing-value" id="timing4Display">1 comma</span>
-                    </div>
-                    <input type="range" min="1" max="10" value="1" class="timing-slider" id="timing4" oninput="updateTimingDisplay()">
-                </div>
-
-                <div class="timing-control">
-                    <div class="timing-label">
-                        <span class="timing-name">Final Completion (8, 1)</span>
-                        <span class="timing-value" id="timing5Display">1 comma</span>
-                    </div>
-                    <input type="range" min="1" max="10" value="1" class="timing-slider" id="timing5" oninput="updateTimingDisplay()">
-                </div>
-
-                <button class="btn btn-secondary" onclick="resetTimings()" style="margin-top: 12px;">Reset to Defaults</button>
-            </details>
         </div>
 
         <div class="menu-section">
@@ -756,7 +779,7 @@
         <div class="menu-section">
             <div class="menu-section-title">About</div>
             <p style="font-size: 13px; color: #6b7280; line-height: 1.6;">
-                Proffer Tool v2.0<br>
+                Proffer Calc v2.0<br>
                 Unofficial tool for airline crew members<br><br>
                 All data stored locally on your device.
             </p>
@@ -771,7 +794,7 @@
                 <span></span>
             </button>
             <div class="header">
-                <h1>✈️ Proffer Tool</h1>
+                <h1>✈️ Proffer Calc</h1>
                 <p>Reserve Shift Selection</p>
             </div>
             <div style="width: 44px;"></div> <!-- Spacer for centering -->
@@ -847,11 +870,17 @@
         <div id="resultCard" class="card">
             <div class="result">
                 <div class="result-label">GENERATED NUMBER (Tap to copy)</div>
-                <div class="result-number" id="resultNumber" onclick="copyNumber()">Select shifts to generate number</div>
+                <div class="result-number" id="resultNumber" onclick="copyNumber()">Enter phone & password in settings, then select shifts</div>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="autoSubmitCheckbox" checked onchange="generateNumber()">
+                <label for="autoSubmitCheckbox">Auto-submit proffer (includes final "1" to submit)</label>
             </div>
 
             <div id="callSection" style="display: none;">
-                <button class="btn btn-call" onclick="callNumber()">📞 Call Now</button>
+                <button class="btn btn-call" onclick="callNumber()">📞 Call & Proffer Now</button>
+                <button class="btn btn-primary" onclick="callConfirm()">📞 Call to Confirm Later</button>
 
                 <div class="input-group">
                     <label for="configName">Save this configuration</label>
@@ -894,53 +923,32 @@
             { name: 'STBY 3', code: '03333' }
         ];
 
-        // Timing settings - simplified to 5 controls
+        // Timing settings - Fixed based on user's requirements
         function getTimings() {
+            const numSequences = selectedShifts.length;
             return {
-                initial: parseInt(localStorage.getItem('timing1') || '3'),      // After phone + password
-                menuNav: parseInt(localStorage.getItem('timing2') || '1'),      // Between menu presses (1,1,2,2)
-                betweenShifts: parseInt(localStorage.getItem('timing3') || '1'), // Between shift entries
-                afterShift: parseInt(localStorage.getItem('timing4') || '1'),    // After each shift code
-                final: parseInt(localStorage.getItem('timing5') || '1')         // Final (8, 1)
+                afterPhone: 3,           // Always 3 commas after phone
+                afterPassword: 2,        // Always 2 commas after password
+                standard: 1,             // 1 comma for everything else (menu nav, between shifts, etc)
+                beforeFinalSubmit: numSequences * 2  // 2 commas per sequence before final "1"
             };
         }
 
+        // No need for these timing functions anymore since timings are fixed
         function saveTimings() {
-            for (let i = 1; i <= 5; i++) {
-                const value = document.getElementById(`timing${i}`).value;
-                localStorage.setItem(`timing${i}`, value);
-            }
+            // Timings are now hardcoded, but keep function for compatibility
         }
 
         function loadTimings() {
-            for (let i = 1; i <= 5; i++) {
-                const value = localStorage.getItem(`timing${i}`);
-                if (value) {
-                    document.getElementById(`timing${i}`).value = value;
-                }
-            }
-            updateTimingDisplay();
+            // Timings are now hardcoded, but keep function for compatibility  
         }
 
         function updateTimingDisplay() {
-            for (let i = 1; i <= 5; i++) {
-                const slider = document.getElementById(`timing${i}`);
-                const display = document.getElementById(`timing${i}Display`);
-                const value = slider.value;
-                display.textContent = value === '1' ? '1 comma' : `${value} commas`;
-            }
-            saveTimings();
-            generateNumber();
+            // Timings are now hardcoded, but keep function for compatibility
         }
 
         function resetTimings() {
-            const defaults = [3, 1, 1, 1, 1];
-            defaults.forEach((val, i) => {
-                document.getElementById(`timing${i + 1}`).value = val;
-                localStorage.setItem(`timing${i + 1}`, val);
-            });
-            updateTimingDisplay();
-            alert('Timings reset to defaults');
+            alert('Timings are now optimized and fixed based on your testing!');
         }
 
         // Share function
@@ -949,8 +957,8 @@
             
             if (navigator.share) {
                 navigator.share({
-                    title: 'Proffer Tool',
-                    text: 'Check out this Proffer Tool for airline crew scheduling',
+                    title: 'Proffer Calc',
+                    text: 'Check out Proffer Calc for airline crew scheduling',
                     url: shareUrl
                 }).catch(() => {
                     copyToClipboard(shareUrl);
@@ -966,6 +974,21 @@
             }).catch(() => {
                 prompt('Copy this link:', text);
             });
+        }
+
+        // Install banner functions
+        function showInstallBanner() {
+            const banner = document.getElementById('installBanner');
+            const dismissed = localStorage.getItem('installBannerDismissed');
+            
+            if (!dismissed && deferredPrompt) {
+                banner.style.display = 'flex';
+            }
+        }
+
+        function dismissInstallBanner() {
+            document.getElementById('installBanner').style.display = 'none';
+            localStorage.setItem('installBannerDismissed', 'true');
         }
 
         // Theme Management
@@ -1152,7 +1175,7 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            document.getElementById('installPrompt').style.display = 'block';
+            showInstallBanner();
         });
 
         function installApp() {
@@ -1160,7 +1183,7 @@
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
-                        document.getElementById('installPrompt').style.display = 'none';
+                        dismissInstallBanner();
                     }
                     deferredPrompt = null;
                 });
@@ -1178,60 +1201,91 @@
             const crewPhone = localStorage.getItem('crewPhoneNumber') || '';
             const password = localStorage.getItem('crewLoginNumber') || '';
             const baseNumber = crewPhone.replace(/\D/g, '');
+            const autoSubmit = document.getElementById('autoSubmitCheckbox').checked;
             
             if (!baseNumber || selectedShifts.length === 0) {
-                document.getElementById('resultNumber').textContent = 'Select shifts to generate number';
+                document.getElementById('resultNumber').textContent = 'Enter phone & password in settings, then select shifts';
                 document.getElementById('callSection').style.display = 'none';
                 return;
             }
 
             const timings = getTimings();
             
-            // Build the sequence:
-            // CS phone # + initial + password + menuNav + 1 + menuNav + 1 + menuNav + 2 + menuNav + 2
+            // Build the sequence with new timing:
+            // Phone,,,Password,,1,1,2,2,sequence,1,sequence,1,sequence,,8,,,,,,1 (if auto-submit)
             let finalNumber = baseNumber;
             
-            // Add initial pause (after phone number)
-            finalNumber += ','.repeat(timings.initial);
+            // After phone: 3 commas
+            finalNumber += ','.repeat(timings.afterPhone);
             
-            // Add password (if provided) with comma before it
+            // Add password
             if (password) {
                 finalNumber += password;
-                finalNumber += ','.repeat(timings.menuNav);
             }
             
-            // Menu navigation: 1, 1, 2, 2
+            // After password: 2 commas
+            finalNumber += ','.repeat(timings.afterPassword);
+            
+            // Menu navigation: 1,1,2,2 (1 comma between each)
             finalNumber += '1';
-            finalNumber += ','.repeat(timings.menuNav) + '1';
-            finalNumber += ','.repeat(timings.menuNav) + '2';
-            finalNumber += ','.repeat(timings.menuNav) + '2';
+            finalNumber += ','.repeat(timings.standard) + '1';
+            finalNumber += ','.repeat(timings.standard) + '2';
+            finalNumber += ','.repeat(timings.standard) + '2';
             
             // Add comma before first shift
-            finalNumber += ','.repeat(timings.betweenShifts);
+            finalNumber += ','.repeat(timings.standard);
             
             // Add each shift/sequence
             selectedShifts.forEach((shift, index) => {
                 finalNumber += shift.code;
-                finalNumber += ','.repeat(timings.afterShift);
+                finalNumber += ','.repeat(timings.standard);
                 
                 // If NOT the last shift, add "1" (meaning "add another")
-                // If IS the last shift, skip the "1" and go to "8" instead
                 if (index < selectedShifts.length - 1) {
                     finalNumber += '1';
-                    finalNumber += ','.repeat(timings.betweenShifts);
+                    finalNumber += ','.repeat(timings.standard);
                 }
             });
             
-            // Final completion: 8 (done adding), then pause, then 1 (post proffer)
-            finalNumber += ','.repeat(timings.final);
+            // After last sequence: 8 (done)
+            finalNumber += ','.repeat(timings.standard);
             finalNumber += '8';
-            finalNumber += ','.repeat(timings.final);
-            finalNumber += '1';
+            
+            // Before final "1": 2 commas per sequence
+            finalNumber += ','.repeat(timings.beforeFinalSubmit);
+            
+            // Final "1" (post proffer) - only if auto-submit is checked
+            if (autoSubmit) {
+                finalNumber += '1';
+            }
 
             // Format for display
             const formatted = formatPhoneNumber(finalNumber);
             document.getElementById('resultNumber').textContent = formatted;
             document.getElementById('callSection').style.display = 'block';
+        }
+
+        // New function for confirm call (CS phone + password + 1,1,1)
+        function callConfirm() {
+            const crewPhone = localStorage.getItem('crewPhoneNumber') || '';
+            const password = localStorage.getItem('crewLoginNumber') || '';
+            const baseNumber = crewPhone.replace(/\D/g, '');
+            
+            if (!baseNumber) {
+                alert('Please set your crew scheduling phone number in settings');
+                return;
+            }
+            
+            // Build: Phone,,,Password,,1,1,1
+            let confirmNumber = baseNumber;
+            confirmNumber += ',,,';  // 3 commas after phone
+            if (password) {
+                confirmNumber += password;
+            }
+            confirmNumber += ',,';   // 2 commas after password
+            confirmNumber += '1,1,1';  // Navigate to confirm menu
+            
+            window.location.href = `tel:${confirmNumber}`;
         }
 
         function formatPhoneNumber(number) {

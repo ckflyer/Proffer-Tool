@@ -762,7 +762,7 @@
     
     <div class="side-menu" id="sideMenu">
         <div class="menu-header">
-            <div class="menu-title">⚙️ Settings</div>
+            <div class="menu-title">Settings</div>
             <button class="close-menu" onclick="closeMenu()">×</button>
         </div>
 
@@ -770,7 +770,7 @@
             <div class="menu-section-title">Crew Scheduling</div>
             <div class="menu-item">
                 <label>Crew Scheduling Phone</label>
-                <input type="tel" id="crewPhoneNumber" placeholder="1-800-555-1234">
+                <input type="tel" id="crewPhoneNumber" placeholder="800-555-1234">
             </div>
             <div class="menu-item">
                 <label>Employee Password</label>
@@ -782,7 +782,7 @@
             <div class="menu-section-title">Advanced Settings</div>
             <details style="cursor: pointer;">
                 <summary style="font-size: 14px; color: var(--text-color); font-weight: 600; padding: 12px 0;">
-                    ⚙️ Fine-Tune Call Timing (Click to expand)
+                    Fine-Tune Call Timing
                 </summary>
                 <p style="font-size: 12px; color: #6b7280; margin: 12px 0;">
                     Adjust pause durations if needed. Defaults are optimized. Each comma ≈ 2 seconds.
@@ -826,13 +826,13 @@
 
         <div class="menu-section">
             <div class="menu-section-title">Share</div>
-            <button class="share-btn" onclick="shareApp()">📤 Share App Link</button>
+            <button class="share-btn" onclick="shareApp()">Share App Link</button>
         </div>
 
         <div class="menu-section">
-            <div class="menu-section-title">Appearance</div>
+            <div class="menu-section-title">Theme</div>
             <div class="menu-item">
-                <label>Theme</label>
+                <!--<label>Theme</label>-->
                 <div class="theme-selector">
                     <button class="theme-btn" data-theme="light" onclick="setTheme('light')">☀️ Light</button>
                     <button class="theme-btn active" data-theme="system" onclick="setTheme('system')">💻 Auto</button>
@@ -889,7 +889,7 @@
         <!-- Shift Selection -->
         <div class="card">
             <div class="section-title">Select Shifts & Sequences</div>
-            <p class="help-text-centered" style="margin-bottom: 16px;">Tap shifts in preferential order. Mix reserve shifts with trip sequences.</p>
+            <p class="help-text-centered" style="margin-bottom: 16px;">Tap shifts in preferential order. You can mix reserve shifts with trip sequences.</p>
             
             <div class="shifts-grid" id="shiftsGrid">
                 <!-- Shifts will be populated here -->
@@ -910,7 +910,7 @@
                                style="flex: 1; padding: 12px 16px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 16px; background: var(--input-bg); color: var(--text-color); text-align: center; font-family: 'Courier New', monospace;">
                         <button class="btn btn-primary" onclick="addCustomSequence()" style="width: auto; padding: 12px 24px; margin: 0;">Add</button>
                     </div>
-                    <p class="help-text-centered">Enter 5-digit trip sequence numbers (positions in your preference order)</p>
+                    <p class="help-text-centered">Enter 5-digit trip sequence (positions in your preference order)</p>
                 </div>
             </div>
 
@@ -920,7 +920,7 @@
         <!-- Result -->
         <div id="resultCard" class="card">
             <div class="result">
-                <div class="result-label">GENERATED NUMBER (Tap to copy)</div>
+                <div class="result-label">Generated Number (Tap to copy)</div>
                 <div class="result-number" id="resultNumber" onclick="copyNumber()">Enter phone & password in settings, then select shifts</div>
             </div>
 
@@ -930,14 +930,14 @@
             </div>
 
             <div id="callSection" style="display: none;">
-                <button class="btn btn-call" onclick="callNumber()">📞 Call & Proffer Now</button>
-                <button class="btn btn-primary" onclick="callConfirm()">📞 Call to Confirm Later</button>
+                <button class="btn btn-call" onclick="callNumber()">Call & Proffer Now</button>
+                <button class="btn btn-primary" onclick="callConfirm()">Call to Confirm Later</button>
 
                 <div class="input-group">
                     <label for="configName">Save this configuration</label>
                     <input type="text" id="configName" placeholder="e.g., Morning RAP Proffer">
                 </div>
-                <button class="btn btn-success" onclick="saveConfig()">💾 Save Configuration</button>
+                <button class="btn btn-success" onclick="saveConfig()">Save Configuration</button>
             </div>
         </div>
 
@@ -949,10 +949,10 @@
 
         <!-- Help -->
         <div class="card">
-            <div class="section-title">ℹ️ How It Works</div>
+            <div class="section-title">How It Works</div>
             <p class="centered-content" style="color: #6b7280; font-size: 14px; line-height: 1.8;">
                 1. Set your crew scheduling phone and password in settings<br>
-                2. Tap shifts in the order you want to proffer them<br>
+                2. Select shifts in the order you want to proffer them<br>
                 3. The app builds the complete dial sequence<br>
                 4. Tap "Call Now" to dial automatically<br>
                 5. Save frequently used configurations

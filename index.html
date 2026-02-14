@@ -765,7 +765,7 @@
             </div>
             <div class="menu-item">
                 <label>Employee Password</label>
-                <input type="tel" id="crewLoginNumber" placeholder="e.g., 12345">
+                <input type="text" id="crewLoginNumber" placeholder="e.g., 12345">
             </div>
         </div>
 
@@ -845,7 +845,7 @@
                 ProfferCalc v1.0<br>
                 Unofficial tool for the proffering airline crew members<br><br>
                 Nothing is stored in the cloud. All data stored locally on your device and your device ONLY.<br><br>
-                For bugs and issues, contact me here: <a href="/cdn-cgi/l/email-protection#fb8b89949d9d9e89989a9798bb9c969a9297d5989496" style="color: #3b82f6; text-decoration: none;"><span class="__cf_email__" data-cfemail="2151534e4747445342404d4261464c40484d0f424e4c">[email&#160;protected]</span></a>
+                For bugs and issues, contact me here: <a href="mailto:proffercalc@gmail.com" style="color: #3b82f6; text-decoration: none;">proffercalc@gmail.com</a>
             </p>
         </div>
     </div>
@@ -922,7 +922,7 @@
 
             <div id="callSection" style="display: none;">
                 <button class="btn btn-call" onclick="callNumber()">Call & Proffer Now</button>
-                <button class="btn btn-primary" onclick="callConfirm()">Call to Confirm</button>
+                <button class="btn btn-primary" onclick="callConfirm()">Call to Confirm Later</button>
 
                 <div class="input-group">
                     <label for="configName">Save this configuration</label>
@@ -951,7 +951,7 @@
         </div>
     </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script>
         let menuStepCount = 0;
         let deferredPrompt;
         let selectedShifts = [];
@@ -1310,8 +1310,8 @@
             const formatted = finalNumber.includes('needed') ? finalNumber : formatPhoneNumber(finalNumber);
             document.getElementById('resultNumber').textContent = formatted;
             
-            // Show call buttons if we have CS phone and password
-            if (baseNumber && password) {
+            // Only show call buttons if we have complete data
+            if (baseNumber && selectedShifts.length > 0) {
                 document.getElementById('callSection').style.display = 'block';
             } else {
                 document.getElementById('callSection').style.display = 'none';
@@ -1439,4 +1439,16 @@
             let configs = JSON.parse(localStorage.getItem('phoneConfigs') || '[]');
             configs.splice(index, 1);
             localStorage.setItem('phoneConfigs', JSON.stringify(configs));
-            loadSavedConfig
+            loadSavedConfigs();
+        }
+
+        // Initialize app
+        initTheme();
+        initShifts();
+        loadSavedConfigs();
+        updateQuickInfo();
+        loadTimings();
+        generateNumber(); // Generate initial display
+    </script>
+</body>
+</html>

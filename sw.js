@@ -1,4 +1,4 @@
-const CACHE_NAME = "proffercalc-v3"; // <-- bump this whenever you deploy changes
+const CACHE_NAME = "proffercalc-v4"; // <-- bump this whenever you deploy changes
 const urlsToCache = [
   "/",
   "/index.html",

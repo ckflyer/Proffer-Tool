@@ -1,10 +1,10 @@
-const CACHE_NAME = "proffercalc";
+const CACHE_NAME = "proffercalc-v3"; // <-- bump this whenever you deploy changes
 const urlsToCache = [
   "/",
   "/index.html",
   "/manifest.json",
-  "/icon-192.png",
-  "/icon-512.png",
+  "/icon192.png",
+  "/icon512.png",
 ];
 
 // Install: cache the core app shell
